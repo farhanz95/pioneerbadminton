@@ -188,9 +188,9 @@ class BookingController extends Controller
 
     public function actionFileUpload()
     {
-        $model = new Booking();
+        $model = new Booking;
 
-        $imageFile = UploadedFile::getInstance($model, 'image');
+        $imageFile = UploadedFile::getInstance($model,'file');
 
         $directory = Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR . Yii::$app->session->id . DIRECTORY_SEPARATOR;
         if (!is_dir($directory)) {
@@ -201,7 +201,6 @@ class BookingController extends Controller
             $uid = uniqid(time(), true);
             $fileName = $uid . '.' . $imageFile->extension;
             $filePath = $directory . $fileName;
-            var_dump($imageFile);die;
             if ($imageFile->saveAs($filePath)) {
                 $path = '/img/temp/' . Yii::$app->session->id . DIRECTORY_SEPARATOR . $fileName;
                 return Json::encode([
@@ -210,6 +209,7 @@ class BookingController extends Controller
                             'name' => $fileName,
                             'size' => $imageFile->size,
                             'url' => $path,
+                            'farhantest' => 'a',
                             'thumbnailUrl' => $path,
                             'deleteUrl' => 'file-delete?name=' . $fileName,
                             'deleteType' => 'POST',

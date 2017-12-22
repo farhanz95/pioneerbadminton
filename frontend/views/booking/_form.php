@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Court;
 use app\models\Location;
 use dosamigos\fileupload\FileUpload;
+use yii\helpers\Url;
 
 $locationArray = ArrayHelper::map(Location::find()->orderBy(['location_name'=>SORT_ASC])->asArray()->all(),'location_id','location_name');
 
@@ -113,6 +114,7 @@ $locationArray = ArrayHelper::map(Location::find()->orderBy(['location_name'=>SO
     <?= $form->field($model, 'court_id')->dropDownList([],['prompt'=>'-Select Location First-']) ?> 
 
     <?= FileUpload::widget([
+        'name' => 'filename',
         'model' => $model,
         'attribute' => 'file',
         'url' => ['file-upload', 'id' => $model->booking_id], // your url, this is just for demo purposes,
@@ -143,7 +145,21 @@ $locationArray = ArrayHelper::map(Location::find()->orderBy(['location_name'=>SO
                         // END VALIDATE FILE UPLOAD
             }',
             'fileuploaddone' => 'function(e, data) {
-                                    // alert("fileuploaddone");
+
+                                    console.log(e);
+                                    console.log(data);
+
+                                    $.each(JSON.parse(data.result), function (index, file) {
+                                      var tempUploadFile = file[0].url;
+                                      var tempDir = "'.Url::base().'/"+tempUploadFile;
+
+                                      var filename = data["files"]["0"].name;
+                                      var tempDirPath = "<a href=\'"+tempDir+"\'>"+filename+"</a>";
+                                      $(".bar").attr("style","width: 100%;background-color:#fff");
+                                      $(".bar").html(tempDirPath);
+
+                                    });
+
                                 }',
             'fileuploadfail' => 'function(e, data) {
                                     alert("fileuploadfail");

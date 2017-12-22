@@ -126,3 +126,8 @@ a.desc:after {
 .fwi {
     font-weight: inherit !important;
 }
+.bar {
+    height: 18px;
+    background: green;
+    margin-top: 5px;
+}

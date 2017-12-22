@@ -10,6 +10,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
+use yii\helpers\Json;
 
 /**
  * BookingController implements the CRUD actions for Booking model.
@@ -179,6 +182,68 @@ class BookingController extends Controller
 
     return $this->redirect(Yii::$app->request->referrer);
 
+    }
+
+    // action examples
+
+    public function actionFileUpload()
+    {
+        $model = new Booking();
+
+        $imageFile = UploadedFile::getInstance($model, 'image');
+
+        $directory = Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR . Yii::$app->session->id . DIRECTORY_SEPARATOR;
+        if (!is_dir($directory)) {
+            FileHelper::createDirectory($directory);
+        }
+
+        if ($imageFile) {
+            $uid = uniqid(time(), true);
+            $fileName = $uid . '.' . $imageFile->extension;
+            $filePath = $directory . $fileName;
+            var_dump($imageFile);die;
+            if ($imageFile->saveAs($filePath)) {
+                $path = '/img/temp/' . Yii::$app->session->id . DIRECTORY_SEPARATOR . $fileName;
+                return Json::encode([
+                    'files' => [
+                        [
+                            'name' => $fileName,
+                            'size' => $imageFile->size,
+                            'url' => $path,
+                            'thumbnailUrl' => $path,
+                            'deleteUrl' => 'file-delete?name=' . $fileName,
+                            'deleteType' => 'POST',
+                        ],
+                    ],
+                ]);
+            }
+        }
+
+        return '';
+    }
+
+    public function actionFileDelete($name)
+    {
+        $directory = Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR . Yii::$app->session->id;
+        if (is_file($directory . DIRECTORY_SEPARATOR . $name)) {
+            unlink($directory . DIRECTORY_SEPARATOR . $name);
+        }
+
+        $files = FileHelper::findFiles($directory);
+        $output = [];
+        foreach ($files as $file) {
+            $fileName = basename($file);
+            $path = '/img/temp/' . Yii::$app->session->id . DIRECTORY_SEPARATOR . $fileName;
+            $output['files'][] = [
+                'name' => $fileName,
+                'size' => filesize($file),
+                'url' => $path,
+                'thumbnailUrl' => $path,
+                'deleteUrl' => 'file-delete?name=' . $fileName,
+                'deleteType' => 'POST',
+            ];
+        }
+        return Json::encode($output);
     }
 
 }

@@ -8,6 +8,7 @@ use kartik\daterange\DateRangePicker;
 use yii\helpers\ArrayHelper;
 use app\models\Court;
 use app\models\Location;
+use dosamigos\fileupload\FileUpload;
 
 $locationArray = ArrayHelper::map(Location::find()->orderBy(['location_name'=>SORT_ASC])->asArray()->all(),'location_id','location_name');
 
@@ -109,7 +110,59 @@ $locationArray = ArrayHelper::map(Location::find()->orderBy(['location_name'=>SO
 
     <?= $form->field($model, 'location')->dropDownList($locationArray,['prompt'=>'-Select Location-']) ?>
 
-    <?= $form->field($model, 'court_id')->dropDownList([],['prompt'=>'-Select Location First-']) ?>
+    <?= $form->field($model, 'court_id')->dropDownList([],['prompt'=>'-Select Location First-']) ?> 
+
+    <?= FileUpload::widget([
+        'model' => $model,
+        'attribute' => 'file',
+        'url' => ['file-upload', 'id' => $model->booking_id], // your url, this is just for demo purposes,
+        'options' => ['accept' => 'pdf/png/jpeg/jpg'],
+        'clientOptions' => [
+            'maxFileSize' => 2000000
+        ],
+        // Also, you can specify jQuery-File-Upload events
+        // see: https://github.com/blueimp/jQuery-File-Upload/wiki/Options#processing-callback-options
+        'clientEvents' => [
+            'fileuploadchange' => 'function(e, data) {
+                        // START VALIDATE FILE UPLOAD
+                        var acceptedFileType = e["currentTarget"].accept;
+                        var arrayAcceptedFileType = acceptedFileType.split("/");
+
+                        var filetype = data["files"]["0"].type.split("/");
+                        var filetype = filetype.slice(-1)[0];
+
+                        if($.inArray(filetype, arrayAcceptedFileType) == -1) {
+                          alert("Please upload only "+arrayAcceptedFileType+" format files.");
+                          return false;
+                        }
+
+                        if(data["files"]["0"].size > maxUploadFileSize()){
+                            alert("Max Uploaded File Size Is "+bytesToSize(maxUploadFileSize()));
+                            return false;
+                        }
+                        // END VALIDATE FILE UPLOAD
+            }',
+            'fileuploaddone' => 'function(e, data) {
+                                    // alert("fileuploaddone");
+                                }',
+            'fileuploadfail' => 'function(e, data) {
+                                    alert("fileuploadfail");
+                                }',
+            'fileuploadprogress' => 'function(e, data){
+
+                                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                                    $(\'#progress .bar\').css(
+                                      \'width\',
+                                      progress + \'%\'
+                                    );
+
+            }'
+        ],
+    ]); ?> 
+
+    <div id="progress">
+        <div class="bar" style="width: 0%;"></div>
+    </div>
 
     <?php if (Yii::$app->user->can('Admin')): ?>
     

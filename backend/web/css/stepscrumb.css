@@ -1,0 +1,27 @@
+.stepscrumb-body{list-style:outside none none;width:100%;}
+.stepscrumb-body:before,
+.stepscrumb-body:after{display:table;content:"";line-height:0}
+.stepscrumb-body:after{clear:both}
+.stepscrumb-body a,.stepscrumb-body a:hover,.stepscrumb-body a:active{text-decoration:none}
+.stepscrumb-body li{width:115px;display:inline-block}
+.stepscrumb-body li 
+.stepscrumb-stage-name{margin:0 auto;padding:2px 5px;text-align:center;font-size:13px}
+.stepscrumb-body li 
+.stepscrumb-stage-container{position:relative}
+.stepscrumb-body li .stepscrumb-stage-container 
+.stepscrumb-stage{height:24px;width:24px;border-radius:16px !important;text-align:center;line-height:24px;font-size:14px;font-weight:bolder;margin:2px auto}
+.stepscrumb-body li .stepscrumb-stage-container .stepscrumb-dots{color:#ccc;font-size:23px;font-weight:bolder;position:absolute;top:0;left:70px;letter-spacing:3px;cursor:default;line-height:12px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none}.stepscrumb-body li.rebook-flow{width:275.25px}.stepscrumb-body li.rebook-flow.last{width:290.25px}
+.stepscrumb-body li.checkin-flow{width:275.25px}
+.stepscrumb-body li.checkin-flow.last{width:290.25px}
+.stepscrumb-body .current 
+.stepscrumb-stage-name{color:#000}.stepscrumb-body .current .stepscrumb-stage{background-color:#FFBE63;color:#fff;}
+.stepscrumb-body .current.disable{pointer-events:none;cursor:default}
+.stepscrumb-body .current.disable a{cursor:default!important}
+.stepscrumb-body .past .stepscrumb-stage-name{color:rgba(0,0,0,.5)}.stepscrumb-body .past .stepscrumb-stage{background-color:#993300;color:#FFF;border: 1px solid #FFF;}
+.stepscrumb-body .past.disable{pointer-events:none;cursor:default}.stepscrumb-body .past.disable a{cursor:default!important}
+.stepscrumb-body .future .stepscrumb-stage-name{color:rgba(0,0,0,.5)}
+.stepscrumb-body .future .stepscrumb-stage{background-color:#A5A5A5;color:#000}
+.stepscrumb-body .future.disable{pointer-events:none;cursor:default}.stepscrumb-body 
+.future.disable a{cursor:default!important}.stepscrumb-body 
+.disable{pointer-events:none;cursor:default}.stepscrumb-body 
+.disable .stepscrumb-stage{background-color:#7A7A7A;color:#fff;border: 1px solid #FFF;}
